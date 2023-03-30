@@ -23,6 +23,9 @@ const Menu = () => {
                                     <li>
                                         <NavLink className="dropdown-item" to="/predios">Prédios</NavLink>
                                     </li>
+                                    <li>
+                                        <NavLink className="dropdown-item" to="/salas">Salas</NavLink>
+                                    </li>                                    
                                 </ul>
                             </li>
                         </ul>
