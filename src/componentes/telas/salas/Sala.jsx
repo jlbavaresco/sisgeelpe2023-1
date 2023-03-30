@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import SalaContext from "./SalaContext";
 import Tabela from "./Tabela";
 import Form from "./Form";
+import Carregando from "../../comuns/Carregando";
 
 function Sala() {
 
@@ -13,6 +14,7 @@ function Sala() {
         descricao: "", capacidade: "", predio : ""
     });
     const [listaPredios, setListaPredios] = useState([]);
+    const [carregando, setCarregando] = useState(true);
 
     const recuperar = async codigo => {
         await fetch(`${process.env.REACT_APP_ENDERECO_API}/salas/${codigo}`)
@@ -51,10 +53,12 @@ function Sala() {
     }
 
     const recuperaSalas = async () => {
+        setCarregando(true);
         await fetch(`${process.env.REACT_APP_ENDERECO_API}/salas`)
             .then(response => response.json())
             .then(data => setListaObjetos(data))
-            .catch(err => setAlerta({ status: "error", message: err }))
+            .catch(err => setAlerta({ status: "error", message: err }));
+        setCarregando(false);
     }    
  
     const recuperaPredios = async () => {
@@ -90,7 +94,7 @@ function Sala() {
             recuperar, acaoCadastrar, 
             handleChange, listaPredios
         }}>
-            <Tabela />
+             { !carregando ? <Tabela /> : <Carregando/> }
             <Form/>
         </SalaContext.Provider>
     )

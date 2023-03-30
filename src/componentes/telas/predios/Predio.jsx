@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PredioContext from "./PredioContext";
 import Tabela from "./Tabela";
 import Form from "./Form";
+import Carregando from "../../comuns/Carregando";
 
 function Predio() {
 
@@ -12,6 +13,7 @@ function Predio() {
         codigo: "", nome: "",
         descricao: "", sigla: ""
     });
+    const [carregando, setCarregando] = useState(true);
 
     const recuperar = async codigo => {
         await fetch(`${process.env.REACT_APP_ENDERECO_API}/predios/${codigo}`)
@@ -50,10 +52,12 @@ function Predio() {
     }
  
     const recuperaPredios = async () => {
+        setCarregando(true);
         await fetch(`${process.env.REACT_APP_ENDERECO_API}/predios`)
             .then(response => response.json())
             .then(data => setListaObjetos(data))
             .catch(err => setAlerta({ status: "error", message: err }))
+        setCarregando(false);
     }
 
     const remover = async objeto => {
@@ -81,7 +85,7 @@ function Predio() {
             recuperar, acaoCadastrar, 
             handleChange
         }}>
-            <Tabela />
+            { !carregando ? <Tabela /> : <Carregando/> }
             <Form/>
         </PredioContext.Provider>
     )
